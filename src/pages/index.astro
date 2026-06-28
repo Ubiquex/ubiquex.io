@@ -1,0 +1,347 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const codeBlock = `<span class="c-comment"># Pull a managed RDS component from the registry</span>
+<span class="c-keyword">component</span> <span class="c-string">"database"</span> {
+  source  = <span class="c-string">"registry.ubiquex.io/rds-postgres"</span>
+  version = <span class="c-string">"1.4.0"</span>
+  engine  = <span class="c-string">"postgres"</span>
+  env     = <span class="c-string">"production"</span>
+}
+
+<span class="c-comment"># Wire output natively into ArgoCD with ~</span>
+<span class="c-keyword">sync</span> <span class="c-string">"argocd"</span> <span class="c-string">"backend"</span> {
+  repo   = <span class="c-string">"github.com/myorg/app-config"</span>
+  path   = <span class="c-string">"apps/backend"</span>
+  target = <span class="c-string">"https://kubernetes.default.svc"</span>
+  values = {
+    db_host = <span class="c-sigil">~</span><span class="c-pending">component.platform.endpoint</span>
+    db_name = <span class="c-sigil">~</span><span class="c-pending">component.platform.db_name</span>
+  }
+}`;
+---
+<Base>
+  <Header />
+  <main style="padding-top: 64px;">
+
+    <section class="hero">
+      <div class="hero-inner">
+
+        <!-- LEFT: text content -->
+        <div class="hero-left">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Now in public Preview
+          </div>
+          <h1><em>Ubiquex; Everywhere!</em></h1>
+          <p class="hero-sub">
+            An Open-Source Platform Engineering Orchestrator with GitOps, AI, and Pulumi at its core
+          </p>
+          <div class="feature-pills">
+            <span class="pill pill-green">5,200+ resources</span>
+            <span class="pill pill-red">No Terraform BSL</span>
+            <span class="pill pill-blue">Pulumi-powered</span>
+            <span class="pill pill-green">AI plan summaries</span>
+            <span class="pill pill-red">Zero glue code</span>
+            <span class="pill pill-blue">Apache 2.0</span>
+          </div>
+          <div class="hero-actions">
+            <a href="https://docs.ubiquex.io/v1/introduction" class="btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Read the docs
+            </a>
+            <a href="https://github.com/ubiquex/ubx" class="btn-ghost">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- RIGHT: code block -->
+        <div class="hero-right">
+          <div class="code-card">
+            <div class="code-header">
+              <div class="dot dot-red"></div>
+              <div class="dot dot-yellow"></div>
+              <div class="dot dot-green"></div>
+              <span class="filename">platform.iac</span>
+            </div>
+            <pre class="code-body" set:html={codeBlock}></pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  /* ── Hero section ───────────────────────────────────────── */
+  .hero {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 30%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(0,166,147,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Two-column grid ────────────────────────────────────── */
+  .hero-inner {
+    max-width: 1280px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+
+  /* ── Left column ─────────────────────────────────────────── */
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ubx-green-soft);
+    border: 1px solid var(--ubx-green-border);
+    color: var(--ubx-green);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--ubx-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-family: var(--ubx-font-display);
+    font-size: clamp(36px, 4.5vw, 60px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--ubx-green);
+  }
+  h2 {
+    font-family: var(--ubx-font-display);
+    font-size: clamp(32px, 4.0vw, 60px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  h2 em {
+    font-style: normal;
+    color: var(--ubx-green);
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: var(--ubx-muted);
+    max-width: 480px;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+
+  .feature-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .pill {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  .pill-green { background: var(--ubx-green-soft); border: 1px solid var(--ubx-green-border); color: var(--ubx-green); }
+  .pill-red   { background: var(--ubx-red-soft);   border: 1px solid var(--ubx-red-border);   color: var(--ubx-red-text); }
+  .pill-blue  { background: var(--ubx-blue-soft);  border: 1px solid var(--ubx-blue-border);  color: var(--ubx-blue-text); }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ubx-green);
+    color: var(--ubx-bg);
+    padding: 12px 24px;
+    border-radius: var(--ubx-radius-sm);
+    font-family: var(--ubx-font-display);
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-primary:hover { background: #00BFA5; transform: translateY(-1px); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--ubx-text);
+    padding: 12px 24px;
+    border-radius: var(--ubx-radius-sm);
+    border: 1px solid var(--ubx-subtle);
+    font-family: var(--ubx-font-display);
+    font-size: 14px;
+    transition: border-color 0.2s, transform 0.1s;
+  }
+
+  .btn-ghost:hover { border-color: var(--ubx-green); transform: translateY(-1px); }
+
+  /* ── Right column: code card ─────────────────────────────── */
+  .hero-right {
+    width: 100%;
+  }
+
+  .code-card {
+    background: var(--ubx-bg);
+    border: 1px solid var(--ubx-border);
+    border-radius: var(--ubx-radius-lg);
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--ubx-border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red    { background: #FF5F57; }
+  .dot-yellow { background: #FFBD2E; }
+  .dot-green  { background: #28CA41; }
+
+  .filename {
+    font-family: var(--ubx-font-mono);
+    font-size: 12px;
+    color: var(--ubx-muted);
+    margin-left: 8px;
+  }
+
+  .code-body {
+    padding: 28px 32px;
+    font-family: var(--ubx-font-mono);
+    font-size: 14px;
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  :global(.c-comment) { color: #3A5A4A; }
+  :global(.c-keyword)  { color: #B08EFF; }
+  :global(.c-string)   { color: #7EC8B0; }
+  :global(.c-number)   { color: #FFA657; }
+  :global(.c-sigil)    { color: var(--ubx-green); font-weight: 700; animation: sigil-glow 3s ease-in-out infinite; }
+  :global(.c-pending)  { color: var(--ubx-green); }
+
+  @keyframes sigil-glow {
+    0%,100% { text-shadow: none; }
+    50%      { text-shadow: 0 0 12px rgba(0,166,147,0.8); }
+  }
+@media (max-width: 900px) {
+  .hero {
+    padding: 48px 24px;
+    align-items: flex-start;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-sub {
+    max-width: 100%;
+  }
+
+  .feature-pills {
+    justify-content: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    justify-content: center;
+  }
+
+  .hero-right {
+    text-align: left;
+  }
+
+  .code-card {
+    text-align: left;
+  }
+
+  .code-body {
+    padding: 20px 16px;
+    font-size: 12px;
+    text-align: left;
+    white-space: pre;
+  }
+}
+</style>

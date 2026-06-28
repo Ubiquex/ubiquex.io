@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --ubx-green:        #00A693;
+  --ubx-green-dark:   #007A6B;
+  --ubx-green-soft:   rgba(0, 166, 147, 0.1);
+  --ubx-green-border: rgba(0, 166, 147, 0.2);
+  --ubx-red:          #C0392B;
+  --ubx-red-soft:     rgba(192, 57, 43, 0.1);
+  --ubx-red-border:   rgba(192, 57, 43, 0.22);
+  --ubx-red-text:     #E05A4A;
+  --ubx-blue:         #1A6B9A;
+  --ubx-blue-soft:    rgba(26, 107, 154, 0.12);
+  --ubx-blue-border:  rgba(26, 107, 154, 0.25);
+  --ubx-blue-text:    #4A9FCC;
+  --ubx-bg:           #0D1117;
+  --ubx-surface:      #161B22;
+  --ubx-border:       #21262D;
+  --ubx-code-bg:      #0D1117;
+  --ubx-text:         #E6EDF3;
+  --ubx-muted:        #7D8590;
+  --ubx-subtle:       #444C56;
+  --ubx-font-display: 'Space Grotesk', sans-serif;
+  --ubx-font-body:    'Inter', sans-serif;
+  --ubx-font-mono:    'JetBrains Mono', monospace;
+  --ubx-radius-sm:    6px;
+  --ubx-radius-md:    10px;
+  --ubx-radius-lg:    12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ubx-bg);
+  color: var(--ubx-text);
+  font-family: var(--ubx-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+code, pre { font-family: var(--ubx-font-mono); }
+a { color: inherit; text-decoration: none; }
+
+/* ── Hero: horizontal split layout ─────────────────────── */
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  text-align: left;
+}
+
+.feature-pills { justify-content: flex-start; }
+.hero-actions  { justify-content: flex-start; }
+
+/* ── Mobile: stack back to single column ─────────────────── */
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .feature-pills { justify-content: center; }
+  .hero-actions  { justify-content: center; }
+}
