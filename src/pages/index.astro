@@ -3,9 +3,23 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string">"aws_s3_bucket"</span> <span class="c-string">"assets"</span> {
-  bucket = <span class="c-string">"ubiquex-\${var.env}-assets"</span>
-  acl    = <span class="c-string">"private"</span>
+const codeBlock = `<span class="c-comment"># Pull a managed RDS component from the registry</span>
+<span class="c-keyword">component</span> <span class="c-string">"database"</span> {
+  source  = <span class="c-string">"registry.ubiquex.io/rds-postgres"</span>
+  version = <span class="c-string">"1.4.0"</span>
+  engine  = <span class="c-string">"postgres"</span>
+  env     = <span class="c-string">"production"</span>
+}
+
+<span class="c-comment"># Wire output natively into ArgoCD with ~</span>
+<span class="c-keyword">sync</span> <span class="c-string">"argocd"</span> <span class="c-string">"backend"</span> {
+  repo   = <span class="c-string">"github.com/myorg/app-config"</span>
+  path   = <span class="c-string">"apps/backend"</span>
+  target = <span class="c-string">"https://kubernetes.default.svc"</span>
+  values = {
+    db_host = <span class="c-sigil">~</span><span class="c-pending">component.platform.endpoint</span>
+    db_name = <span class="c-sigil">~</span><span class="c-pending">component.platform.db_name</span>
+  }
 }`;
 ---
 <Base>
@@ -19,19 +33,18 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
         <div class="hero-left">
           <div class="eyebrow">
             <span class="eyebrow-dot"></span>
-            ubx 1.0 — Now Available
+            Now in public Preview
           </div>
-          <h1>Infrastructure as Code, <em>reimagined</em></h1>
+          <h1><em>Ubiquex; Everywhere!</em></h1>
           <p class="hero-sub">
-            ubx compiles .iac files to Pulumi TypeScript. Zero config to get started,
-            compile in under a second, and Pulumi-native output you can read and inspect.
+            An Open-Source Platform Engineering Orchestrator with GitOps, AI, and Pulumi at its core
           </p>
           <div class="feature-pills">
             <span class="pill pill-green">5,200+ resources</span>
             <span class="pill pill-red">No Terraform BSL</span>
             <span class="pill pill-blue">Pulumi-powered</span>
             <span class="pill pill-green">AI plan summaries</span>
-            <span class="pill pill-red">Zero config</span>
+            <span class="pill pill-red">Zero glue code</span>
             <span class="pill pill-blue">Apache 2.0</span>
           </div>
           <div class="hero-actions">
@@ -53,7 +66,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
               <div class="dot dot-red"></div>
               <div class="dot dot-yellow"></div>
               <div class="dot dot-green"></div>
-              <span class="filename">infra/main.iac</span>
+              <span class="filename">platform.iac</span>
             </div>
             <pre class="code-body" set:html={codeBlock}></pre>
           </div>
@@ -113,7 +126,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     gap: 8px;
     background: var(--ubx-green-soft);
     border: 1px solid var(--ubx-green-border);
-    color: var(--color-brand);
+    color: var(--ubx-green);
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 1px;
@@ -126,7 +139,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
   .eyebrow-dot {
     width: 6px;
     height: 6px;
-    background: var(--color-brand);
+    background: var(--ubx-green);
     border-radius: 50%;
     animation: pulse 2s infinite;
   }
@@ -147,9 +160,8 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
 
   h1 em {
     font-style: normal;
-    color: var(--color-brand);
+    color: var(--ubx-green);
   }
-
   h2 {
     font-family: var(--ubx-font-display);
     font-size: clamp(32px, 4.0vw, 60px);
@@ -161,7 +173,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
 
   h2 em {
     font-style: normal;
-    color: var(--color-brand);
+    color: var(--ubx-green);
   }
 
   .hero-sub {
@@ -186,9 +198,9 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     font-weight: 500;
   }
 
-  .pill-green { background: var(--ubx-green-soft); border: 1px solid var(--ubx-green-border); color: var(--color-brand); }
-  .pill-red   { background: var(--ubx-red-soft);   border: 1px solid var(--ubx-red-border);   color: var(--color-highlight-bright); }
-  .pill-blue  { background: var(--ubx-blue-soft);  border: 1px solid var(--ubx-blue-border);  color: var(--color-accent-bright); }
+  .pill-green { background: var(--ubx-green-soft); border: 1px solid var(--ubx-green-border); color: var(--ubx-green); }
+  .pill-red   { background: var(--ubx-red-soft);   border: 1px solid var(--ubx-red-border);   color: var(--ubx-red-text); }
+  .pill-blue  { background: var(--ubx-blue-soft);  border: 1px solid var(--ubx-blue-border);  color: var(--ubx-blue-text); }
 
   .hero-actions {
     display: flex;
@@ -200,7 +212,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--color-brand);
+    background: var(--ubx-green);
     color: var(--ubx-bg);
     padding: 12px 24px;
     border-radius: var(--ubx-radius-sm);
@@ -210,7 +222,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     transition: background 0.2s, transform 0.1s;
   }
 
-  .btn-primary:hover { background: var(--color-brand-bright); transform: translateY(-1px); }
+  .btn-primary:hover { background: #00BFA5; transform: translateY(-1px); }
 
   .btn-ghost {
     display: inline-flex;
@@ -226,7 +238,7 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     transition: border-color 0.2s, transform 0.1s;
   }
 
-  .btn-ghost:hover { border-color: var(--color-brand); transform: translateY(-1px); }
+  .btn-ghost:hover { border-color: var(--ubx-green); transform: translateY(-1px); }
 
   /* ── Right column: code card ─────────────────────────────── */
   .hero-right {
@@ -271,67 +283,65 @@ const codeBlock = `<span class="c-keyword">resource</span> <span class="c-string
     white-space: pre;
   }
 
-  /* ── Syntax highlighting — Persian blue for keywords ─────── */
   :global(.c-comment) { color: #3A5A4A; }
-  :global(.c-keyword)  { color: var(--color-accent-bright); }
+  :global(.c-keyword)  { color: #B08EFF; }
   :global(.c-string)   { color: #7EC8B0; }
   :global(.c-number)   { color: #FFA657; }
-  :global(.c-sigil)    { color: var(--color-brand); font-weight: 700; animation: sigil-glow 3s ease-in-out infinite; }
-  :global(.c-pending)  { color: var(--color-brand); }
+  :global(.c-sigil)    { color: var(--ubx-green); font-weight: 700; animation: sigil-glow 3s ease-in-out infinite; }
+  :global(.c-pending)  { color: var(--ubx-green); }
 
   @keyframes sigil-glow {
     0%,100% { text-shadow: none; }
     50%      { text-shadow: 0 0 12px rgba(0,166,147,0.8); }
   }
-
-  @media (max-width: 900px) {
-    .hero {
-      padding: 48px 24px;
-      align-items: flex-start;
-    }
-
-    .hero-inner {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-
-    .hero-left {
-      align-items: center;
-      text-align: center;
-    }
-
-    .hero-sub {
-      max-width: 100%;
-    }
-
-    .feature-pills {
-      justify-content: center;
-    }
-
-    .hero-actions {
-      justify-content: center;
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .btn-primary,
-    .btn-ghost {
-      justify-content: center;
-    }
-
-    .hero-right {
-      text-align: left;
-    }
-
-    .code-card {
-      text-align: left;
-    }
-
-    .code-body {
-      padding: 20px 16px;
-      font-size: 12px;
-      text-align: left;
-      white-space: pre;
-    }
+@media (max-width: 900px) {
+  .hero {
+    padding: 48px 24px;
+    align-items: flex-start;
   }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-sub {
+    max-width: 100%;
+  }
+
+  .feature-pills {
+    justify-content: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    justify-content: center;
+  }
+
+  .hero-right {
+    text-align: left;
+  }
+
+  .code-card {
+    text-align: left;
+  }
+
+  .code-body {
+    padding: 20px 16px;
+    font-size: 12px;
+    text-align: left;
+    white-space: pre;
+  }
+}
 </style>
