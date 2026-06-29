@@ -1,18 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
+  /* ── Brand: Persian green (primary) ───────────────────────── */
   --ubx-green:        #00A693;
   --ubx-green-dark:   #007A6B;
   --ubx-green-soft:   rgba(0, 166, 147, 0.1);
   --ubx-green-border: rgba(0, 166, 147, 0.2);
-  --ubx-red:          #C0392B;
-  --ubx-red-soft:     rgba(192, 57, 43, 0.1);
-  --ubx-red-border:   rgba(192, 57, 43, 0.22);
-  --ubx-red-text:     #E05A4A;
-  --ubx-blue:         #1A6B9A;
-  --ubx-blue-soft:    rgba(26, 107, 154, 0.12);
-  --ubx-blue-border:  rgba(26, 107, 154, 0.25);
-  --ubx-blue-text:    #4A9FCC;
+
+  /* ── Highlight: Persian red (errors, urgent CTAs) ─────────── */
+  --ubx-red:          #CC2936;
+  --ubx-red-soft:     rgba(204, 41, 54, 0.1);
+  --ubx-red-border:   rgba(204, 41, 54, 0.22);
+  --ubx-red-text:     #E8404E;
+
+  /* ── Accent: Persian blue (links, info, code) ─────────────── */
+  --ubx-blue:         #1C39BB;
+  --ubx-blue-soft:    rgba(28, 57, 187, 0.12);
+  --ubx-blue-border:  rgba(28, 57, 187, 0.25);
+  --ubx-blue-text:    #4B5FD4;
+
+  /* ── Semantic aliases ──────────────────────────────────────── */
+  --color-brand:           #00A693;
+  --color-brand-bright:    #00C4AE;
+  --color-accent:          #1C39BB;
+  --color-accent-bright:   #4B5FD4;
+  --color-highlight:       #CC2936;
+  --color-highlight-bright:#E8404E;
+
+  /* ── Surfaces ──────────────────────────────────────────────── */
   --ubx-bg:           #0D1117;
   --ubx-surface:      #161B22;
   --ubx-border:       #21262D;
@@ -20,9 +35,13 @@
   --ubx-text:         #E6EDF3;
   --ubx-muted:        #7D8590;
   --ubx-subtle:       #444C56;
+
+  /* ── Typography ────────────────────────────────────────────── */
   --ubx-font-display: 'Space Grotesk', sans-serif;
   --ubx-font-body:    'Inter', sans-serif;
   --ubx-font-mono:    'JetBrains Mono', monospace;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
   --ubx-radius-sm:    6px;
   --ubx-radius-md:    10px;
   --ubx-radius-lg:    12px;
@@ -40,6 +59,21 @@ body {
 }
 code, pre { font-family: var(--ubx-font-mono); }
 a { color: inherit; text-decoration: none; }
+
+/* ── Gradient text utilities ────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-brand) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-warm {
+  background: linear-gradient(100deg, var(--color-highlight) 0%, var(--color-brand) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 /* ── Hero: horizontal split layout ─────────────────────── */
 .hero-inner {

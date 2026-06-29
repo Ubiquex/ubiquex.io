@@ -1,10 +1,9 @@
 ---
+import Logo from './Logo.astro';
 ---
 
 <header class="nav">
-  <a href="/" class="nav-logo">
-    <img src="/logo.png" alt="ubiquex" height="36" />
-  </a>
+  <Logo />
   <nav>
     <ul class="nav-links">
       <li><a href="https://docs.ubiquex.io" class="nav-cta">Get started →</a></li>
@@ -27,27 +26,21 @@
     border-bottom: 1px solid var(--ubx-border);
   }
 
-  .nav-logo img {
-    display: block;
-    height: 36px;
-    width: auto;
-  }
-
   .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
   .nav-links a { color: var(--ubx-muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
   .nav-links a:hover { color: var(--ubx-text); }
+
   .nav-cta {
-    background: var(--ubx-green) !important;
+    background: var(--color-brand) !important;
     color: var(--ubx-bg) !important;
     padding: 8px 20px;
     border-radius: var(--ubx-radius-sm);
     font-weight: 600 !important;
   }
-  .nav-cta:hover { background: #00BFA5 !important; }
+  .nav-cta:hover { background: var(--color-brand-bright) !important; }
 
   @media (max-width: 768px) {
     .nav { padding: 0 20px; }
     .nav-hide { display: none; }
-    .nav-logo img { height: 28px; }
   }
 </style>
