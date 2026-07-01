@@ -1,0 +1,39 @@
+---
+import { siteConfig } from "@/config/site";
+---
+
+<footer class="mt-20 border-t border-border bg-card">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="flex flex-col items-center justify-between gap-8 md:flex-row">
+      <div class="flex flex-col items-center gap-2 md:items-start">
+        <span class="text-lg font-bold text-foreground">Ubiquex</span>
+        <p class="text-sm text-muted-foreground max-w-xs">
+          Platform engineering, ubiquitous by design.
+        </p>
+      </div>
+      <div class="flex items-center gap-6">
+        <a
+          href="https://docs.ubiquex.io"
+          class="text-sm text-muted-foreground transition-colors hover:text-primary"
+          >Docs</a
+        >
+        <a
+          href="https://github.com/ubiquex/ubx"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-muted-foreground transition-colors hover:text-primary"
+          >GitHub</a
+        >
+        <a
+          href="https://ubiquex.io/blog"
+          class="text-sm text-muted-foreground transition-colors hover:text-primary"
+          >Blog</a
+        >
+      </div>
+    </div>
+    <div class="mt-8 border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
+      <span>&copy; {new Date().getFullYear()} Ubiquex. All rights reserved.</span>
+      <span>ubx is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">Apache 2.0 License</a>.</span>
+    </div>
+  </div>
+</footer>

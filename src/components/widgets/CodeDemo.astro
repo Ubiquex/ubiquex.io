@@ -1,0 +1,237 @@
+---
+// CodeDemo.astro
+// Dual-pane hero widget — left: .iac source, right: ubx plan terminal output
+// Colors match Mintlify palm theme: primary #00A693, code bg #0d1117
+---
+
+<div class="code-demo-wrapper">
+  <div class="code-demo-grid">
+
+    <!-- Left pane: .iac source -->
+    <div class="pane pane-code">
+      <div class="pane-titlebar">
+        <div class="traffic-lights">
+          <span class="tl tl-red"></span>
+          <span class="tl tl-yellow"></span>
+          <span class="tl tl-green"></span>
+        </div>
+        <span class="pane-filename">main.iac</span>
+        <span class="pane-lang">ubx</span>
+      </div>
+      <div class="pane-body">
+        <pre class="code-block"><code><span class="tok-keyword">provider</span> <span class="tok-string">"aws"</span> <span class="tok-brace">&lbrace;</span>
+  <span class="tok-attr">version</span> <span class="tok-eq">=</span> <span class="tok-string">"~&gt; 6.0"</span>
+<span class="tok-brace">&rbrace;</span>
+
+<span class="tok-keyword">backend</span> <span class="tok-string">"s3"</span> <span class="tok-brace">&lbrace;</span>
+  <span class="tok-attr">bucket</span> <span class="tok-eq">=</span> <span class="tok-string">"myorg-ubx-state"</span>
+  <span class="tok-attr">region</span> <span class="tok-eq">=</span> <span class="tok-string">"us-east-1"</span>
+  <span class="tok-attr">key</span>    <span class="tok-eq">=</span> <span class="tok-string">"prod/state.json"</span>
+<span class="tok-brace">&rbrace;</span>
+
+<span class="tok-keyword">component</span> <span class="tok-string">"database"</span> <span class="tok-brace">&lbrace;</span>
+  <span class="tok-attr">source</span>         <span class="tok-eq">=</span> <span class="tok-string">"https://github.com/myorg/components-rds"</span>
+  <span class="tok-attr">identifier</span>     <span class="tok-eq">=</span> <span class="tok-string">"myapp-prod-db"</span>
+  <span class="tok-attr">instance_class</span> <span class="tok-eq">=</span> <span class="tok-string">"db.t3.micro"</span>
+  <span class="tok-attr">encrypted</span>      <span class="tok-eq">=</span> <span class="tok-number">true</span>
+<span class="tok-brace">&rbrace;</span>
+
+<span class="tok-keyword">sync</span> <span class="tok-string">"argocd"</span> <span class="tok-label">"backend"</span> <span class="tok-brace">&lbrace;</span>
+  <span class="tok-attr">repo</span>      <span class="tok-eq">=</span> <span class="tok-string">"https://github.com/myorg/app"</span>
+  <span class="tok-attr">path</span>      <span class="tok-eq">=</span> <span class="tok-string">"k8s"</span>
+  <span class="tok-attr">namespace</span> <span class="tok-eq">=</span> <span class="tok-string">"argocd"</span>
+  <span class="tok-attr">values</span> <span class="tok-eq">=</span> <span class="tok-brace">&lbrace;</span>
+    <span class="tok-attr">db_host</span> <span class="tok-eq">=</span> <span class="tok-pending">~component.database.endpoint</span>
+    <span class="tok-attr">db_port</span> <span class="tok-eq">=</span> <span class="tok-number">5432</span>
+    <span class="tok-attr">env</span>     <span class="tok-eq">=</span> <span class="tok-string">"prod"</span>
+  <span class="tok-brace">&rbrace;</span>
+<span class="tok-brace">&rbrace;</span>
+
+<span class="tok-keyword">output</span> <span class="tok-label">"db_endpoint"</span> <span class="tok-brace">&lbrace;</span>
+  <span class="tok-attr">value</span> <span class="tok-eq">=</span> <span class="tok-pending">~component.database.endpoint</span>
+<span class="tok-brace">&rbrace;</span>
+</code></pre>
+      </div>
+    </div>
+
+    <!-- Right pane: terminal output -->
+    <div class="pane pane-terminal">
+      <div class="pane-titlebar">
+        <div class="traffic-lights">
+          <span class="tl tl-red"></span>
+          <span class="tl tl-yellow"></span>
+          <span class="tl tl-green"></span>
+        </div>
+        <span class="pane-filename">terminal</span>
+        <span class="pane-lang">ubx plan --cost</span>
+      </div>
+      <div class="pane-body">
+        <pre class="terminal-block"><code><span class="t-muted">$</span> <span class="t-cmd">ubx plan --cost</span>
+
+<span class="t-section">◆ Compile</span>   <span class="t-file">main.iac</span>
+<span class="t-ok">✓</span>  <span class="t-muted">valid</span>
+
+<span class="t-section">◆ Plan</span>      <span class="t-muted">2 resources</span>
+
+  <span class="t-create">+</span> <span class="t-resource">component</span><span class="t-muted">.</span><span class="t-label">database</span>
+  <span class="t-create">+</span> <span class="t-resource">argocd_application</span><span class="t-muted">.</span><span class="t-label">backend</span>
+      <span class="t-attr">db_host</span> <span class="t-eq">=</span> <span class="t-pending">(known after apply)</span>
+
+<span class="t-summary"><span class="t-create-count">2 to add</span>  <span class="t-muted">·</span>  <span class="t-change-count">0 to change</span>  <span class="t-muted">·</span>  <span class="t-destroy-count">0 to destroy</span></span>
+
+<span class="t-section">◆ AI Summary</span>
+
+  <span class="t-ai">Provisions a PostgreSQL RDS instance and wires its
+  endpoint into a Helm release at apply time — no
+  scripts, no manual copy-paste.</span>
+  <span class="t-ai-risk">✦ Risk: Low</span><span class="t-muted"> · all creates, no destructive changes</span>
+
+<span class="t-section">◆ Cost Estimate</span>  <span class="t-muted">(monthly)</span>
+
+  <span class="t-cost-row"><span class="t-resource">component.database</span>        <span class="t-cost">~$14/mo</span></span>
+  <span class="t-cost-row"><span class="t-resource">argocd_application.backend</span>  <span class="t-cost">~$0/mo</span></span>
+  <span class="t-cost-total">Total  ~$14/month</span>
+
+<span class="t-muted t-blink">█</span>
+</code></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .code-demo-wrapper {
+    width: 100%;
+    padding: 0;
+  }
+
+  .code-demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    border-radius: 0;
+    overflow: visible;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 720px) {
+    .code-demo-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pane {
+    background: #0d1117;
+    display: flex;
+    flex-direction: column;
+    min-height: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1e2530;
+  }
+
+  .pane-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #161b22;
+    border-bottom: 1px solid #1e2530;
+    flex-shrink: 0;
+  }
+
+  .traffic-lights {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .tl {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: block;
+  }
+  .tl-red    { background: #ff5f57; }
+  .tl-yellow { background: #febc2e; }
+  .tl-green  { background: #28c840; }
+
+  .pane-filename {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 12px;
+    color: #8b949e;
+    flex: 1;
+  }
+
+  .pane-lang {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11px;
+    color: #00A693;
+    background: rgba(0, 166, 147, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 166, 147, 0.25);
+  }
+
+  .pane-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .code-block,
+  .terminal-block {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #e6edf3;
+    background: transparent;
+    white-space: pre;
+  }
+
+  .tok-comment  { color: #6e7681; font-style: italic; }
+  .tok-keyword  { color: #57C5C6; }
+  .tok-string   { color: #a5d6ff; }
+  .tok-label    { color: #79c0ff; }
+  .tok-attr     { color: #7ee787; }
+  .tok-eq       { color: #8b949e; }
+  .tok-number   { color: #f2cc60; }
+  .tok-brace    { color: #e6edf3; }
+  .tok-pending  { color: #00A693; }
+
+  .t-muted         { color: #6e7681; }
+  .t-cmd           { color: #e6edf3; font-weight: 500; }
+  .t-section       { color: #57C5C6; font-weight: 500; }
+  .t-file          { color: #a5d6ff; }
+  .t-ok            { color: #3fb950; }
+  .t-create        { color: #3fb950; font-weight: 700; }
+  .t-resource      { color: #79c0ff; }
+  .t-label         { color: #e6edf3; }
+  .t-attr          { color: #7ee787; }
+  .t-eq            { color: #8b949e; }
+  .t-val           { color: #a5d6ff; }
+  .t-pending       { color: #00A693; font-style: italic; }
+  .t-summary       { display: block; margin-top: 4px; }
+  .t-create-count  { color: #3fb950; font-weight: 500; }
+  .t-change-count  { color: #f2cc60; }
+  .t-destroy-count { color: #ff7b72; }
+  .t-ai            { color: #c9d1d9; font-style: italic; }
+  .t-ai-risk       { color: #00A693; font-weight: 500; }
+  .t-cost-row      { display: block; }
+  .t-cost          { color: #f2cc60; font-weight: 500; }
+  .t-cost-total    { display: block; margin-top: 4px; color: #f2cc60; font-weight: 700; }
+
+  .t-blink {
+    animation: blink 1.1s step-end infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .t-blink { animation: none; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+</style>

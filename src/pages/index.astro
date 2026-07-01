@@ -1,347 +1,260 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-
-const codeBlock = `<span class="c-comment"># Pull a managed RDS component from the registry</span>
-<span class="c-keyword">component</span> <span class="c-string">"database"</span> {
-  source  = <span class="c-string">"registry.ubiquex.io/rds-postgres"</span>
-  version = <span class="c-string">"1.4.0"</span>
-  engine  = <span class="c-string">"postgres"</span>
-  env     = <span class="c-string">"production"</span>
-}
-
-<span class="c-comment"># Wire output natively into ArgoCD with ~</span>
-<span class="c-keyword">sync</span> <span class="c-string">"argocd"</span> <span class="c-string">"backend"</span> {
-  repo   = <span class="c-string">"github.com/myorg/app-config"</span>
-  path   = <span class="c-string">"apps/backend"</span>
-  target = <span class="c-string">"https://kubernetes.default.svc"</span>
-  values = {
-    db_host = <span class="c-sigil">~</span><span class="c-pending">component.platform.endpoint</span>
-    db_name = <span class="c-sigil">~</span><span class="c-pending">component.platform.db_name</span>
-  }
-}`;
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/config/site";
+import Hero from "@/components/widgets/Hero.astro";
+import Features from "@/components/widgets/Features.astro";
+import Github from "@/components/widgets/Github.astro";
+import { Icon } from "astro-icon/components";
+import CodeDemo from "@/components/widgets/CodeDemo.astro";
+const metadata = {
+  title: "Ubiquex — Infra and apps, shipped as one",
+  description: "Provision. Deploy. Govern. Everywhere. Platform engineering, ubiquitous by design.",
+  ignoreTitleTemplate: true,
+};
 ---
-<Base>
-  <Header />
-  <main style="padding-top: 64px;">
 
-    <section class="hero">
-      <div class="hero-inner">
+<BaseLayout {metadata}>
+  <Hero
+    title={`Infra and apps, <br class="hidden md:block" /> <span class="bg-linear-to-r from-[#00A693] via-[#00BFA8] to-[#57C5C6] bg-clip-text text-transparent">shipped as one</span>`}
+    tagline="Now in Public Preview"
+    description={`${siteConfig.description}`}
+  >
+    <div class="mt-10 w-full">
+      <CodeDemo />
+    </div>
 
-        <!-- LEFT: text content -->
-        <div class="hero-left">
-          <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            Now in public Preview
-          </div>
-          <h1><em>Ubiquex; Everywhere!</em></h1>
-          <p class="hero-sub">
-            An Open-Source Platform Engineering Orchestrator with GitOps, AI, and Pulumi at its core
-          </p>
-          <div class="feature-pills">
-            <span class="pill pill-green">5,200+ resources</span>
-            <span class="pill pill-red">No Terraform BSL</span>
-            <span class="pill pill-blue">Pulumi-powered</span>
-            <span class="pill pill-green">AI plan summaries</span>
-            <span class="pill pill-red">Zero glue code</span>
-            <span class="pill pill-blue">Apache 2.0</span>
-          </div>
-          <div class="hero-actions">
-            <a href="https://docs.ubiquex.io/v1/introduction" class="btn-primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              Read the docs
-            </a>
-            <a href="https://github.com/ubiquex/ubx" class="btn-ghost">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              View on GitHub
-            </a>
-          </div>
-        </div>
-
-        <!-- RIGHT: code block -->
-        <div class="hero-right">
-          <div class="code-card">
-            <div class="code-header">
-              <div class="dot dot-red"></div>
-              <div class="dot dot-yellow"></div>
-              <div class="dot dot-green"></div>
-              <span class="filename">platform.iac</span>
-            </div>
-            <pre class="code-body" set:html={codeBlock}></pre>
-          </div>
-        </div>
-
+    <!-- Stats bar -->
+    <div class="w-full mt-12 pt-12 border-t border-border">
+      <div class="text-center mb-10">
+        <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-4">By the numbers</p>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Built on a solid foundation</h2>
       </div>
-    </section>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:plug" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">+100 providers</span>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:shield-off" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">No Terraform BSL</span>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:layers" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">Pulumi-powered</span>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:sparkles" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">AI plan summaries</span>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:unplug" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">Zero glue code</span>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-muted-foreground">
+            <Icon name="lucide:scale" class="w-5 h-5" />
+          </div>
+          <span class="text-sm font-semibold text-foreground">Apache 2.0</span>
+        </div>
+      </div>
+    </div>
 
-  </main>
-  <Footer />
-</Base>
+  </Hero>
+  <Features
+    tagline="Features"
+    title="Built differently"
+    subtitle="Infrastructure and application delivery in one language with no glue code for developers happiness."
+    features={[
+      {
+        title: "HCL-inspired Language",
+        description:
+          "Write infrastructure in a clean, readable DSL that compiles to Pulumi TypeScript, Python, or Go. No YAML sprawl, no SDK boilerplate.",
+        icon: "lucide:file-code-2",
+        iconClass: "bg-[#00A693]/10 text-[#00A693]",
+      },
+      {
+        title: "Built-in AI",
+        description:
+          "Get plain-English plan summaries, cost estimates, and security suggestions — powered by Claude, right in your terminal.",
+        icon: "lucide:sparkles",
+        iconClass: "bg-[#FE28A2]/10 text-[#FE28A2]",
+      },
+      {
+        title: "Pulumi at the Core",
+        description:
+          "ubx compiles to native Pulumi programs. Every provider, every resource, every state backend — all Pulumi-compatible out of the box.",
+        icon: "lucide:layers",
+        iconClass: "bg-[#0067A5]/10 text-[#0067A5]",
+      },
+      {
+        title: "Pending\u003cT\u003e Type System",
+        description:
+          "Wire infrastructure outputs directly into app config with the ~ sigil. ubx tracks Pending\u003cT\u003e values and generates the right .apply() chains automatically.",
+        icon: "lucide:git-branch",
+        iconClass: "bg-[#D99058]/10 text-[#D99058]",
+      },
+      {
+        title: "Policy as Code & Tests",
+        description:
+          "Enforce security rules and write plan-time assertions in .iac source. Catch misconfigurations before credentials are ever needed.",
+        icon: "lucide:shield-check",
+        iconClass: "bg-[#C81D11]/10 text-[#C81D11]",
+      },
+      {
+        title: "One Source, Any Runtime",
+        description:
+          "The same .iac files compile to TypeScript, Python, or Go. Switch runtimes without rewriting a single resource block.",
+        icon: "lucide:repeat-2",
+        iconClass: "bg-[#FE28A2]/10 text-[#FE28A2]",
+      },
+    ]}
+  />
 
-<style>
-  /* ── Hero section ───────────────────────────────────────── */
-  .hero {
-    min-height: calc(100vh - 64px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 64px;
-    position: relative;
-    overflow: hidden;
-  }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -200px;
-    left: 30%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(0,166,147,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
+  <!-- Who is ubx for — tabbed -->
+  <div class="relative mx-auto max-w-7xl px-4 md:px-6 py-20 md:py-28">
+    <div class="text-center mb-12">
+      <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-4">Who it's for</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Built for everyone who ships</h2>
+      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">Whether you write the code or own the platform, ubx speaks your language.</p>
+    </div>
 
-  /* ── Two-column grid ────────────────────────────────────── */
-  .hero-inner {
-    max-width: 1280px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 72px;
-    align-items: center;
-  }
+    <!-- Tab buttons -->
+    <div class="flex justify-center mb-10">
+      <div class="inline-flex rounded-xl border border-border p-1 bg-muted gap-1">
+        <button id="tab-dev" class="tab-btn px-6 py-2 rounded-lg text-sm font-semibold transition-all bg-background text-foreground shadow">
+          For Developers
+        </button>
+        <button id="tab-pe" class="tab-btn px-6 py-2 rounded-lg text-sm font-semibold transition-all text-muted-foreground hover:text-foreground">
+          For Platform Engineers
+        </button>
+      </div>
+    </div>
 
-  /* ── Left column ─────────────────────────────────────────── */
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    <!-- Developers panel -->
+    <div id="panel-dev" class="grid md:grid-cols-3 gap-6">
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#00A693] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#00A693]/10 text-[#00A693]">
+          <Icon name="lucide:unplug" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">No more glue scripts</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Wire a DB endpoint into Helm values with <code class="text-[#00A693] text-xs">~</code>. ubx generates the sequencing — no CI steps, no copy-paste, no drift.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#0067A5] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#0067A5]/10 text-[#0067A5]">
+          <Icon name="lucide:shield-check" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">Catch errors before apply</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">ubx validate type-checks your entire stack in milliseconds — no cloud credentials, no network, no surprises in production.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#FE28A2] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#FE28A2]/10 text-[#FE28A2]">
+          <Icon name="lucide:repeat-2" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">Write once, run anywhere</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Same .iac source compiles to TypeScript, Python, or Go. Use the language your team already knows — no rewrite needed.</p>
+        </div>
+      </div>
+    </div>
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--ubx-green-soft);
-    border: 1px solid var(--ubx-green-border);
-    color: var(--ubx-green);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 100px;
-    margin-bottom: 32px;
-  }
+    <!-- Platform Engineers panel -->
+    <div id="panel-pe" class="grid md:grid-cols-3 gap-6 hidden">
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#00A693] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#00A693]/10 text-[#00A693]">
+          <Icon name="lucide:layers" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">One language, full stack</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Provision, deploy, sync, govern, test — all in .iac. No context switching between Terraform, Helm, ArgoCD, and policy tools.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#C81D11] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#C81D11]/10 text-[#C81D11]">
+          <Icon name="lucide:file-lock-2" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">Policy and compliance built in</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Enforce security rules at validate time — before any credentials touch the cloud. Policies live alongside the resources they govern.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 p-6 rounded-xl bg-card border-l-4 border-[#FE28A2] border border-border">
+        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-lg bg-[#FE28A2]/10 text-[#FE28A2]">
+          <Icon name="lucide:sparkles" class="w-5 h-5" />
+        </div>
+        <div>
+          <h3 class="font-semibold mb-1">AI-powered planning</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Cost estimates, plain-English summaries, and risk analysis before you apply — powered by Claude, right in your terminal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  .eyebrow-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--ubx-green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
+  <script>
+    (function() {
+      function switchTab(tab) {
+        var devBtn = document.getElementById('tab-dev');
+        var peBtn = document.getElementById('tab-pe');
+        var devPanel = document.getElementById('panel-dev');
+        var pePanel = document.getElementById('panel-pe');
+        if (!devBtn || !peBtn || !devPanel || !pePanel) return;
+        if (tab === 'dev') {
+          devBtn.classList.add('bg-background', 'text-foreground', 'shadow');
+          devBtn.classList.remove('text-muted-foreground');
+          peBtn.classList.remove('bg-background', 'text-foreground', 'shadow');
+          peBtn.classList.add('text-muted-foreground');
+          devPanel.classList.remove('hidden');
+          pePanel.classList.add('hidden');
+        } else {
+          peBtn.classList.add('bg-background', 'text-foreground', 'shadow');
+          peBtn.classList.remove('text-muted-foreground');
+          devBtn.classList.remove('bg-background', 'text-foreground', 'shadow');
+          devBtn.classList.add('text-muted-foreground');
+          pePanel.classList.remove('hidden');
+          devPanel.classList.add('hidden');
+        }
+      }
+      document.addEventListener('astro:page-load', function() {
+        var devBtn = document.getElementById('tab-dev');
+        var peBtn = document.getElementById('tab-pe');
+        if (devBtn) devBtn.addEventListener('click', function() { switchTab('dev'); });
+        if (peBtn) peBtn.addEventListener('click', function() { switchTab('pe'); });
+      });
+    })();
+  </script>
 
-  @keyframes pulse {
-    0%,100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.4; transform: scale(0.7); }
-  }
-
-  h1 {
-    font-family: var(--ubx-font-display);
-    font-size: clamp(36px, 4.5vw, 60px);
-    font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 24px;
-  }
-
-  h1 em {
-    font-style: normal;
-    color: var(--ubx-green);
-  }
-  h2 {
-    font-family: var(--ubx-font-display);
-    font-size: clamp(32px, 4.0vw, 60px);
-    font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 24px;
-  }
-
-  h2 em {
-    font-style: normal;
-    color: var(--ubx-green);
-  }
-
-  .hero-sub {
-    font-size: clamp(15px, 1.4vw, 18px);
-    color: var(--ubx-muted);
-    max-width: 480px;
-    margin-bottom: 28px;
-    line-height: 1.7;
-  }
-
-  .feature-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-  }
-
-  .pill {
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    font-weight: 500;
-  }
-
-  .pill-green { background: var(--ubx-green-soft); border: 1px solid var(--ubx-green-border); color: var(--ubx-green); }
-  .pill-red   { background: var(--ubx-red-soft);   border: 1px solid var(--ubx-red-border);   color: var(--ubx-red-text); }
-  .pill-blue  { background: var(--ubx-blue-soft);  border: 1px solid var(--ubx-blue-border);  color: var(--ubx-blue-text); }
-
-  .hero-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--ubx-green);
-    color: var(--ubx-bg);
-    padding: 12px 24px;
-    border-radius: var(--ubx-radius-sm);
-    font-family: var(--ubx-font-display);
-    font-size: 14px;
-    font-weight: 600;
-    transition: background 0.2s, transform 0.1s;
-  }
-
-  .btn-primary:hover { background: #00BFA5; transform: translateY(-1px); }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: var(--ubx-text);
-    padding: 12px 24px;
-    border-radius: var(--ubx-radius-sm);
-    border: 1px solid var(--ubx-subtle);
-    font-family: var(--ubx-font-display);
-    font-size: 14px;
-    transition: border-color 0.2s, transform 0.1s;
-  }
-
-  .btn-ghost:hover { border-color: var(--ubx-green); transform: translateY(-1px); }
-
-  /* ── Right column: code card ─────────────────────────────── */
-  .hero-right {
-    width: 100%;
-  }
-
-  .code-card {
-    background: var(--ubx-bg);
-    border: 1px solid var(--ubx-border);
-    border-radius: var(--ubx-radius-lg);
-    overflow: hidden;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-  }
-
-  .code-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--ubx-border);
-    background: rgba(255,255,255,0.02);
-  }
-
-  .dot { width: 12px; height: 12px; border-radius: 50%; }
-  .dot-red    { background: #FF5F57; }
-  .dot-yellow { background: #FFBD2E; }
-  .dot-green  { background: #28CA41; }
-
-  .filename {
-    font-family: var(--ubx-font-mono);
-    font-size: 12px;
-    color: var(--ubx-muted);
-    margin-left: 8px;
-  }
-
-  .code-body {
-    padding: 28px 32px;
-    font-family: var(--ubx-font-mono);
-    font-size: 14px;
-    line-height: 1.9;
-    overflow-x: auto;
-    white-space: pre;
-  }
-
-  :global(.c-comment) { color: #3A5A4A; }
-  :global(.c-keyword)  { color: #B08EFF; }
-  :global(.c-string)   { color: #7EC8B0; }
-  :global(.c-number)   { color: #FFA657; }
-  :global(.c-sigil)    { color: var(--ubx-green); font-weight: 700; animation: sigil-glow 3s ease-in-out infinite; }
-  :global(.c-pending)  { color: var(--ubx-green); }
-
-  @keyframes sigil-glow {
-    0%,100% { text-shadow: none; }
-    50%      { text-shadow: 0 0 12px rgba(0,166,147,0.8); }
-  }
-@media (max-width: 900px) {
-  .hero {
-    padding: 48px 24px;
-    align-items: flex-start;
-  }
-
-  .hero-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .hero-left {
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero-sub {
-    max-width: 100%;
-  }
-
-  .feature-pills {
-    justify-content: center;
-  }
-
-  .hero-actions {
-    justify-content: center;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn-primary,
-  .btn-ghost {
-    justify-content: center;
-  }
-
-  .hero-right {
-    text-align: left;
-  }
-
-  .code-card {
-    text-align: left;
-  }
-
-  .code-body {
-    padding: 20px 16px;
-    font-size: 12px;
-    text-align: left;
-    white-space: pre;
-  }
-}
-</style>
+  <Github
+    title="Don't forget to star us!"
+    subtitle="Support this template and keep the project alive. Your stars help us continue improving and adding new features."
+    tagline="Open Source"
+    icon="lucide:github"
+    actions={[
+      {
+        text: "Star on GitHub",
+        href: "https://github.com/devgelo-labs/astro-starter-pro",
+        variant: "primary",
+        icon: "lucide:star",
+      },
+      {
+        text: "Fork Repository",
+        href: "https://github.com/devgelo-labs/astro-starter-pro/fork",
+        variant: "secondary",
+        icon: "lucide:git-fork",
+      },
+    ]}
+  />
+</BaseLayout>
