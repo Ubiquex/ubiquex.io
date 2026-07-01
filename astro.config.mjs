@@ -7,7 +7,7 @@ import remarkReadingTime from "remark-reading-time";
 import { remarkCodeWindows } from "./src/plugins/remarkCodeWindows.mjs";
 
 export default defineConfig({
-  site: "https://astrostarterpro.com/",
+  site: "https://ubiquex.io",
   integrations: [sitemap(), icon(), mdx()],
   markdown: {
     syntaxHighlight: false,

@@ -4,15 +4,15 @@ export const siteConfig = {
   name: "Ubiquex",
   description:
     "Provision. Deploy. Govern. Everywhere.",
-  url: "https://astrostarterpro.com",
+  url: "https://ubiquex.io",
   lang: "en",
   locale: "en_US",
-  author: "Devgelo",
-  twitter: "@Devgelo",
+  author: "Ubiquex",
+  twitter: "@ubiquex",
   ogImage: ogImage,
   socialLinks: {
-    twitter: "https://twitter.com",
-    github: "https://github.com/devgelo-labs/astro-starter-pro",
+    twitter: "https://twitter.com/ubiquex",
+    github: "https://github.com/ubiquex/ubx",
     discord: "https://discord.com",
   },
   navLinks: [
